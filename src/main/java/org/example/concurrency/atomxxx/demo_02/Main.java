@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 假设一个线程在调用 increment() 后还没来得及调用 getCount()，
  * 另一个线程可能已经执行了 decrement()。这会导致最终结果与预期不符。
+ * 不保证多个同步方法执行的原子性
  */
 public class Main {
     public static void main(String[] args) {
