@@ -13,25 +13,32 @@ public class Demo02 {
     Object lock = new Object();
 
     public void add() {
-        for (int i = 0; i < 10; i++) {
-            System.out.println(Thread.currentThread().getName() + " add(),当前个数" + dataList.size());
-            dataList.add(i);
-            if (i == 5) {
-                // 通知等待的其他线程
-                lock.notify();
+        // notify需要配合synchronized一起使用，因为notify执行之后会释放锁
+        synchronized (lock) {
+            for (int i = 0; i < 10; i++) {
+                System.out.println(Thread.currentThread().getName() + " add(),当前个数" + dataList.size());
+                dataList.add(i);
+                if (i == 5) {
+                    // 通知等待的其他线程
+                    lock.notify();
+                }
             }
         }
     }
 
     public void getSize() {
-        if (dataList.size() != 5) {
-            try {
-                lock.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        // wait需要配合synchronized一起使用，因为wait会释放锁
+        synchronized (lock) {
+            if (dataList.size() != 5) {
+                try {
+                    // 释放锁 等待其他线程通知唤醒
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
+            System.out.println("元素个数达到5，"+Thread.currentThread().getName()+"运行结束");
         }
-        System.out.println("元素个数达到5，"+Thread.currentThread().getName()+"运行结束");
     }
 
     public static void main(String[] args) throws InterruptedException {
