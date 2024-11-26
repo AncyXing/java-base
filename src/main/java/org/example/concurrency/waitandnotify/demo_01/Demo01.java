@@ -2,7 +2,6 @@ package org.example.concurrency.waitandnotify.demo_01;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 实现一个容器，提供两个方法，add,size
